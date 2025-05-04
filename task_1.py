@@ -8,12 +8,11 @@ class Homework(Trie):
                 f"Illegal argument for countWordsWithSuffix: suffix = {pattern} must be a string"
             )
 
-        matching_count = 0
+        matching_count = []
 
         def _count(curr, s):
             if s == '' and curr.value is not None:
-                nonlocal matching_count
-                matching_count += 1
+                matching_count.append(1)
 
             for char in curr.children:
                 if s.startswith(char):
@@ -23,14 +22,13 @@ class Homework(Trie):
 
         _count(self.root, pattern)
 
-        return matching_count
+        return sum(matching_count)
 
     def has_prefix(self, prefix) -> bool:
         if not isinstance(prefix, str):
             raise TypeError(
                 f"Illegal argument for hasPrefix: prefix = {prefix} must be a string"
             )
-
 
         current = self.root
         for char in prefix:
@@ -40,15 +38,16 @@ class Homework(Trie):
 
         return True
 
+
 if __name__ == "__main__":
     trie = Homework()
-    words = ["apple", "application", "banana", "cat"]
+    words = ["apple", "application", "banana", "cat", "nation", "action"]
     for i, word in enumerate(words):
         trie.put(word, i)
 
     # Перевірка кількості слів, що закінчуються на заданий суфікс
     assert trie.count_words_with_suffix("e") == 1  # apple
-    assert trie.count_words_with_suffix("ion") == 1  # application
+    assert trie.count_words_with_suffix("ion") == 3  # application
     assert trie.count_words_with_suffix("a") == 1  # banana
     assert trie.count_words_with_suffix("at") == 1  # cat
 
